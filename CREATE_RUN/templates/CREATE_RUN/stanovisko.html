@@ -1,0 +1,26 @@
+{% extends 'CREATE_RUN/base.html' %}
+{% block body %}
+{% if entry %}
+    <table id="myTable" class="display">
+        <thead>
+        <tr>
+            <th>Nazov</th>
+            <th>Suradnice</th>
+            <th>Vyska</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for item in entry.items %}
+            <tr>
+                <td>{{ item.nazov }}</td>
+                <td>{{ item.zem_dlzka }} : {{ item.zem_sirka }}</td>
+                <td>{{ item.vyska }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endif %}
+
+
+
+{% endblock %}
