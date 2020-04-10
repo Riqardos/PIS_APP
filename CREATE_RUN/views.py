@@ -3,6 +3,9 @@ from zeep import Client
 
 
 # Create your views here.
+def view_home(request):
+    return render(request, 'CREATE_RUN/home.html', {})
+
 
 def view_page(request):
     return render(request, 'CREATE_RUN/page.html', {})
