@@ -3,14 +3,14 @@
 {% if entry %}
     <h2 class="mt-3">Pridanie behu</h2>
     <hr>
-    <form action='create_run' method='POST' class="border p-3">
+    <form action='create_page_success' method='POST' class="border p-3">
     {% csrf_token %}
         <label for="">Nazov behu:</label>
         <input name="name" type="text" class="form-control">
         <label for="">Typ behu</label>
         <select name="typ" id="" class="form-control">
-            <option value="0">stafeta</option>
-            <option value="1">normalny</option>
+            <option value="0">štafeta</option>
+            <option value="1">normálny</option>
         </select>
         <label for="">Termin konania behu:</label>
         <input type="datetime-local" name="termin" class="form-control">
@@ -53,11 +53,11 @@
             $("#stanoviska").append("<input type='hidden' name=\"stanovisko_name\" value='"+ $("#stanovisko_select").val() +"'>" +
                 "<h2>"+ $("#stanovisko_select").val() +"</h2>" +
                 "<div class=\"form-check\">\n" +
-                "                <label for=\"\">Obcerstvenie</label>\n" +
+                "                <label for=\"\">Obcerstvenie [€]</label>\n" +
                 "                <input class=\"form-control\" type=\"number\" name=\"cena_obcerstvenie\" placeholder=\"cena\">\n" +
                 "            </div>\n" +
                 "            <div class=\"form-check\">\n" +
-                "                <label for=\"\">Lekarska pomoc</label>\n" +
+                "                <label for=\"\">Lekarska pomoc [€]</label>\n" +
                 "                <input class=\"form-control\" type=\"number\" name=\"cena_pomoc\" placeholder=\"cena\">\n" +
                 "            </div>\n" +
                 "            <div class=\"form-check\">\n" +
@@ -69,14 +69,14 @@
                 "                <input type=\"checkbox\" class=\"form-check-input\" name=\"porada\">\n" +
                 "                <label for=\"\">Timova porada</label>\n" +
                 "            </div>\n" +
-                "            <div class=\"form-check\">\n" +
+                "            <div id=\"stafeta_check_box\" class=\"form-check\">\n" +
                                 "<input type='hidden' value='False' name='odovzdanie'>" +
                 "                <input type=\"checkbox\" class=\"form-check-input\" name=\"odovzdanie\">\n" +
                 "                <label for=\"\">Odovzdanie stafety</label>\n" +
                 "            </div>\n" +
-                "            <label for=\"\">Casovy limit dosiahnutie stanoviska:</label>\n" +
+                "            <label for=\"\">Casovy limit dosiahnutie stanoviska[s]:</label>\n" +
                 "            <input type=\"number\" name=\"limit\" class=\"form-control\">\n" +
-                "            <label for=\"\">Cena prepravy batoziny:</label>\n" +
+                "            <label for=\"\">Cena prepravy batoziny[€]:</label>\n" +
                 "            <input type=\"number\" name=\"cena_preprava\" class=\"form-control\" >\n" +
                 "            <hr>\n" +
                 "\n" +
@@ -84,6 +84,27 @@
             return false;
         })
     });
+
+    document.getElementsByTagName('select')[0].onchange = function() {
+    var index = this.selectedIndex;
+    var inputText = this.children[index].innerHTML.trim();
+    var prepinac;
+    if (inputText == "štafeta") {
+        prepinac = false
+    }
+    else{
+        prepinac = true
+    }
+
+    var nodes = document.getElementById("stafeta_check_box").getElementsByTagName('*');
+        for(var i = 0; i < nodes.length; i++){
+            nodes[i].disabled = prepinac;
+        }
+
+    console.log(inputText);
+    }
+
+
 
 </script>
 {% endblock %}

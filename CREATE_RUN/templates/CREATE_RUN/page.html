@@ -1,7 +1,48 @@
 {% extends 'CREATE_RUN/base.html' %}
 {% block body %}
 
+{% if output %}
+<div class="accordion" id="accordionExample">
+                {% for beh in output.behy %}
+                    <div class="card">
+                        <div role="button" class="card-header btn text-left " data-toggle="collapse"
+                             data-target="{{ '#collapse' }}{{ forloop.counter }}" aria-expanded="true">
+                            <p class="card-text">{{ beh.name }}</p>
+                            <p class="card-text"><small
+                                    class="text-muted">{{ beh.datum_konania}}</small></p>
 
-HELLO THERE
 
+
+                        </div>
+
+                        <div id="{{ 'collapse' }}{{ forloop.counter }}" class="collapse"
+                             data-parent="#accordionExample">
+                            <div class="card-body">
+                                <div class="row no-gutters">
+{#                                    <div class="col-md-4">#}
+{#                                        <img src="{{ entry.img }}" class="card-img" alt="...">#}
+{#                                    </div>#}
+                                    <div class="col-md-8">
+                                        <div class="card-body">
+                                            <p class="card-text">Kapacita: {{ beh.kapacita }}</p>
+                                            <p class="card-text">Podporný tím: {{ beh.podporny_tim }}</p>
+                                            <p class="card-text">Typ behu tím: {{ beh.stafeta }}</p>
+                                            <p class="card-text">Počet prihlásených: {{ beh.prihlaseni }}</p>
+                                            <p class="card-text">Základná cena: {{ beh.zakladna_cena }}</p>
+{#                                            <p class="card-text"><small#}
+{#                                                    class="text-muted">{{ entry.date }}</small></p>#}
+{#                                            <a href="{{ entry.link }}" target="_blank" class="btn btn-secondary">Visit#}
+{#                                                page</a>#}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                {% endfor %}
+            </div>
+    {% else %}
+        <h1>Nothing is loaded</h1>
+    {% endif %}
 {% endblock %}
