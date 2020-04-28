@@ -1,14 +1,63 @@
 {% extends 'CREATE_RUN/base.html' %}
 {% block body %}
-<div class="container">
+
+<form action='create_run' method='GET'>
+    <div class="container">
         <div class="row">
-            <div class="col text-center">
+            <div class="col text-center ">
                 <br>
-                <h3>Úspešne vytvorený beh</h3>
-                <h5>Zelate si vytvorit novy beh ?</h5>
-                <button type='submit' class="btn btn-primary my-2 my-sm-0">Vytvoriť nový beh</button>
+                <h3 class="my-3">Úspešne vytvorený beh</h3>
+                <h5 class="my-3">Zelate si vytvorit novy beh ?</h5>
+                <button type='submit' class="btn btn-primary my-3 my-sm-0">Vytvoriť nový beh</button>
             </div>
+
+
+            <div class="col">
+                <br>
+                <div class="card">
+
+                    <div class="card-header">
+                        <h3 class="card-title">{{ beh.name }}</h3>
+                    </div>
+
+                    <p class="card-body">
+                        <a class="btn btn-outline-primary mr-3" data-toggle="collapse" href="#infoCollapse" role="button" aria-expanded="false" aria-controls="infoCollapse">Informacie o behu</a>
+                        <a class="btn btn-outline-primary mr-3" data-toggle="collapse" href="#stanoviskaCollapse" role="button" aria-expanded="false" aria-controls="stanoviskaCollapse">Stanoviska</a>
+                    </p>
+
+                    <div class="col">
+                        <div class="collapse multi-collapse" id="infoCollapse">
+                            <div class="card-body" >
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">Datum konania: {{ beh.datum_konania }}</li>
+                                <li class="list-group-item">Kapacita: {{ beh.kapacita }}</li>
+                                <li class="list-group-item">Podporný tím: {{ beh.podporny_tim }}</li>
+                                <li class="list-group-item">Typ behu tím: {{ beh.stafeta }}</li>
+                                <li class="list-group-item">Počet prihlásených: {{ beh.prihlaseni }}</li>
+                                <li class="list-group-item">Základná cena: {{ beh.zakladna_cena }}</li>
+                            </ul>
+                            </div>
+                         </div>
+                    </div>
+                    <div class="col">
+                        <div class="collapse multi-collapse" id="stanoviskaCollapse">
+                            <div class="card-body">
+                                <h5>Stanoviska:</h5>
+                                <ul class="list-group list-group-flush">
+                                    {% for stanovisko in stanoviska %}
+                                    <li class="list-group-item">{{ stanovisko.name }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
         </div>
     </div>
+</form>
+
 
 {% endblock %}

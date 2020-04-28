@@ -40,7 +40,7 @@ def view_page_success(request):
             "id": random.randint(1, 10),
             "name": request.POST['name'],
             "stafeta": True if request.POST.get('typ') == '0' else False,
-            "datum_konania": datetime.datetime.strptime(request.POST['termin'], '%Y-%m-%d %H:%M:%S'),
+            "datum_konania": datetime.datetime.strptime(request.POST['termin'], '%Y-%m-%dT%H:%M'),
             "kapacita": int(request.POST.get('kapacita')) if request.POST.get('kapacita') else 0,
             "podporny_tim": True if request.POST.get('podporny_tim') == 'on' else False,
             "prihlaseni": 0,
@@ -94,7 +94,7 @@ def view_page_success(request):
 
         vloz_do_db(beh, stanoviska)
 
-        return render(request, 'CREATE_RUN/page_success.html', {})
+        return render(request, 'CREATE_RUN/page_success.html', {'beh': beh, 'stanoviska': stanoviska})
 
 def view_stanovisko(request):
     global global_stanice
