@@ -25,10 +25,10 @@
                                     <div class="col-md-8">
                                         <div class="card-body">
                                             <p class="card-text">Kapacita: {{ beh.kapacita }}</p>
-                                            <p class="card-text">Podporný tím: {{ beh.podporny_tim }}</p>
-                                            <p class="card-text">Typ behu tím: {{ beh.stafeta }}</p>
+                                            <p class="card-text">Podporný tím: {% if beh.podporny_tim %}Áno{% else %}Nie{% endif %}</p>
+                                            <p class="card-text">Typ behu:  {% if beh.stafeta %}Štafeta{% else %}Normálny{% endif %}</p>
                                             <p class="card-text">Počet prihlásených: {{ beh.prihlaseni }}</p>
-                                            <p class="card-text">Základná cena: {{ beh.zakladna_cena }}</p>
+                                            <p class="card-text">Základná cena: {{ beh.zakladna_cena }} €</p>
 {#                                            <p class="card-text"><small#}
 {#                                                    class="text-muted">{{ entry.date }}</small></p>#}
 {#                                            <a href="{{ entry.link }}" target="_blank" class="btn btn-secondary">Visit#}

@@ -16,7 +16,6 @@ global_dict_stanice = {}
 
 
 def view_page(request):
-
     client_behy = Client('http://pis.predmety.fiit.stuba.sk/pis/ws/Students/Team041Beh?WSDL')
     behy = client_behy.service.getAll()
 
@@ -25,6 +24,7 @@ def view_page(request):
     }
 
     return render(request, 'CREATE_RUN/page.html', {'output': output})
+
 
 def view_page_success(request):
     global global_stanice
@@ -61,7 +61,7 @@ def view_page_success(request):
             odovzdania = ['' for i in range(len(stanovisko_names))]
 
         for index, stanovisko in enumerate(stanovisko_names):
-            zem_dlzka, zem_sirka, prevysenie = global_dict_stanice[stanovisko]
+            zem_dlzka, zem_sirka, vyska = global_dict_stanice[stanovisko]
             stanica = {
                 "id": index,
                 "id_beh": beh['id'],
@@ -73,10 +73,11 @@ def view_page_success(request):
                 "cena_pacera": float(ceny_pacer[index]) if ceny_pacer[index] else float(0),
                 "obcerstvenie": True if obcerstvenia[index] else False,
                 "cena_obcerstvenia": float(obcerstvenia[index]) if obcerstvenia[index] else float(0),
+                'cena_batozina': float(ceny_preprava[index]) if ceny_preprava[index] else float(0),
                 "timova_porada": True if porady[index] == 'True' else False,
                 "odovzdanie_stafety": True if odovzdania[index] == 'True' else False,
                 "casovy_limit_dosiahnutia": int(limity[index]) if limity[index] else 0,
-                "prevysenie": prevysenie,
+                "vyska": vyska,
                 "zem_sirka": zem_sirka,
                 "zem_dlzka": zem_dlzka
             }
@@ -84,17 +85,14 @@ def view_page_success(request):
 
         stanoviska = vypocitaj_vzdialenosti(stanoviska)
 
-        zakladna_cena = vypocitaj_cenu(stanoviska)
+        stanoviska = vypocitaj_prevysenie(stanoviska)
 
-        beh['zakladna_cena'] = zakladna_cena
-
-        print(stanoviska)
-        print(beh)
-        print(zakladna_cena)
+        beh['zakladna_cena'] = vypocitaj_cenu(stanoviska)
 
         vloz_do_db(beh, stanoviska)
 
         return render(request, 'CREATE_RUN/page_success.html', {'beh': beh, 'stanoviska': stanoviska})
+
 
 def view_stanovisko(request):
     global global_stanice
@@ -124,6 +122,7 @@ def vypocitaj_vzdialenosti(stanoviska):
 
         if index == 0:
             stanovisko['vzdialenost_predchadzajuceho_stanoviska'] = 0
+            stanovisko['prevysenie'] = 0
             continue
         else:
             prev_zem_sirka = stanoviska[index - 1]['zem_sirka']
@@ -134,10 +133,38 @@ def vypocitaj_vzdialenosti(stanoviska):
             vzdialenost = client_distance.service.distanceByGPS(prev_zem_sirka, prev_zem_dlzka, aktual_zem_sirka,
                                                                 aktual_zem_dlzka)
 
+            # predosla a aktualna vyska
+            pred_vyska = stanoviska[index - 1]['vyska']
+            aktual_vyska = stanovisko['vyska']
+
+            stanovisko['prevysenie'] = aktual_vyska - pred_vyska
             stanovisko['vzdialenost_predchadzajuceho_stanoviska'] = vzdialenost
 
     return stanoviska
 
+
+def vypocitaj_prevysenie(stanoviska):
+    #     stanoviska = [
+    #  ...
+    #     {"zem_sirka":12, "zem_dlzka":12},
+    #     {"zem_sirka":432, "zem_dlzka":23}
+    # ...
+    #     ]
+
+
+    for index, stanovisko in enumerate(stanoviska):
+
+        if index == 0:
+            stanovisko['prevysenie'] = 0
+            continue
+        else:
+            # predosla a aktualna vyska
+            pred_vyska = stanoviska[index - 1]['vyska']
+            aktual_vyska = stanovisko['vyska']
+
+            stanovisko['prevysenie'] = aktual_vyska - pred_vyska
+
+    return stanoviska
 
 def ziskaj_stanice():
     stanice = []
