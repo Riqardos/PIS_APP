@@ -31,10 +31,10 @@
                             <ul class="list-group list-group-flush">
                                 <li class="list-group-item">Datum konania: {{ beh.datum_konania }}</li>
                                 <li class="list-group-item">Kapacita: {{ beh.kapacita }}</li>
-                                <li class="list-group-item">Podporný tím: {{ beh.podporny_tim }}</li>
-                                <li class="list-group-item">Typ behu tím: {{ beh.stafeta }}</li>
+                                <li class="list-group-item">Podporný tím: {% if beh.podporny_tim %}Áno{% else %}Nie{% endif %}</li>
+                                <li class="list-group-item">Typ behu: {% if beh.stafeta %}Štafeta{% else %}Normálny{% endif %}</li>
                                 <li class="list-group-item">Počet prihlásených: {{ beh.prihlaseni }}</li>
-                                <li class="list-group-item">Základná cena: {{ beh.zakladna_cena }}</li>
+                                <li class="list-group-item">Základná cena: {{ beh.zakladna_cena }}€</li>
                             </ul>
                             </div>
                          </div>
