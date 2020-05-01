@@ -1,0 +1,12 @@
+
+.idea/PIS_APP.iml
+.idea/workspace.xml
+CREATE_RUN/__pycache__/__init__.cpython-38.pyc
+CREATE_RUN/__pycache__/admin.cpython-38.pyc
+CREATE_RUN/__pycache__/models.cpython-38.pyc
+CREATE_RUN/__pycache__/urls.cpython-38.pyc
+CREATE_RUN/__pycache__/views.cpython-38.pyc
+CREATE_RUN/migrations/__pycache__/__init__.cpython-38.pyc
+PIS_APP/__pycache__/__init__.cpython-38.pyc
+PIS_APP/__pycache__/settings.cpython-38.pyc
+PIS_APP/__pycache__/wsgi.cpython-38.pyc
