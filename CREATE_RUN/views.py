@@ -90,8 +90,21 @@ def view_page_success(request):
         beh['zakladna_cena'] = vypocitaj_cenu(stanoviska)
 
         vloz_do_db(beh, stanoviska)
+        notify(beh, stanoviska)
 
         return render(request, 'CREATE_RUN/page_success.html', {'beh': beh, 'stanoviska': stanoviska})
+
+def notify(beh, stanoviska):
+    client = Client('http://pis.predmety.fiit.stuba.sk/pis/ws/Students/Team041Bezec?WSDL')
+    bezci = client.service.getAll()
+    pocasie = Client('http://pis.predmety.fiit.stuba.sk/pis/ws/WeatherForecast?WSDL')
+    pocasie = pocasie.service.getTemperatureByDate(beh["datum_konania"].strftime("%Y-%m-%d"), stanoviska[0]["zem_sirka"], stanoviska[0]["zem_dlzka"])
+    email_msg = "Ahoj {},\nmame pre teba novy beh!\nBeh {} sa kona {}, teplota ma byt {}.\nVidime sa!"
+    for bezec in bezci:
+        email = Client('http://pis.predmety.fiit.stuba.sk/pis/ws/NotificationServices/Email?WSDL')
+        print("Posielam mail: {}".format(bezec["email"]))
+        send = email.service.notify("041", "D1QFEP", bezec["email"], "Novy beh", email_msg.format(bezec["name"], beh["name"], beh["datum_konania"], pocasie))
+        print("Send: {}".format(send))
 
 
 def view_stanovisko(request):
