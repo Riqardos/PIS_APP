@@ -1,33 +1,31 @@
 {% extends 'CREATE_RUN/base.html' %}
 {% block body %}
 {% if entry %}
-    <h2 class="mt-3">Pridanie behu</h2>
+    <h2 class="mt-3">Vytvorenie nového behu</h2>
     <hr>
     <form action='create_page_success' method='POST' class="border p-3">
     {% csrf_token %}
-        <label for="">Nazov behu:</label>
-        <input name="name" type="text" class="form-control">
-        <label for="">Typ behu</label>
+        <label for="" class="my-2">Názov behu:</label>
+        <input name="name" type="text" class="form-control" required>
+        <label for="" class="my-2">Typ behu:</label>
         <select name="typ" id="" class="form-control">
             <option value="0">štafeta</option>
             <option value="1">normálny</option>
         </select>
-        <label for="">Termin konania behu:</label>
-        <input type="datetime-local" name="termin" class="form-control">
-        <label for="">Maximalny pocet bezcov:</label>
+        <label for="" class="my-2">Termín konania behu:</label>
+        <input type="datetime-local" name="termin" class="form-control" required>
+        <label for="" class="my-2">Maximálny počet bežcov:</label>
         <input type="number" class="form-control" name="kapacita">
-        <div class="form-check">
+        <div class="form-check my-2">
             <input type="checkbox" class="form-check-input" name="podporny_tim">
-            <label for="">Podporny tim</label>
+            <label for="">Podporný tím</label>
         </div>
-        <h4>Stanoviska:</h4>
+        <h4>Stanoviská:</h4>
         <div class="container border p-3">
-            <div id="stanoviska">
-
-            </div>
+            <div id="stanoviska"></div>
 
             <div class="form-inline">
-                <button class="btn btn-outline-primary mr-3" type="button" id="stanovisko_btn">Pridat stanovisko</button>
+                <button class="btn btn-outline-primary mr-3" type="button" id="stanovisko_btn">Pridať stanovisko</button>
                 <select class="form-control" id="stanovisko_select">
                 {% for item in entry.items %}
                     <option value="{{ item.nazov }}">{{ item.nazov }}</option>
@@ -53,30 +51,30 @@
             $("#stanoviska").append("<input type='hidden' name=\"stanovisko_name\" value='"+ $("#stanovisko_select").val() +"'>" +
                 "<h2>"+ $("#stanovisko_select").val() +"</h2>" +
                 "<div class=\"form-check\">\n" +
-                "                <label for=\"\">Obcerstvenie [€]</label>\n" +
+                "                <label for=\"\" class=\"my-2\">Občerstvenie [€]</label>\n" +
                 "                <input class=\"form-control\" type=\"number\" name=\"cena_obcerstvenie\" placeholder=\"cena\">\n" +
                 "            </div>\n" +
                 "            <div class=\"form-check\">\n" +
-                "                <label for=\"\">Lekarska pomoc [€]</label>\n" +
+                "                <label for=\"\" class=\"my-2\">Lekárska pomoc [€]</label>\n" +
                 "                <input class=\"form-control\" type=\"number\" name=\"cena_pomoc\" placeholder=\"cena\">\n" +
                 "            </div>\n" +
                 "            <div class=\"form-check\">\n" +
-                "                <label for=\"\">Pacer</label>\n" +
-                "                <input class=\"form-control\" type=\"number\" name=\"cena_pacer\" placeholder=\"cena\">\n" +
+                "                <label for=\"\" class=\"my-2\">Pacer [€]</label>\n" +
+                "                <input class=\"form-control mb-3\" type=\"number\" name=\"cena_pacer\" placeholder=\"cena\">\n" +
                 "            </div>\n" +
-                "            <div class=\"form-check\">\n" +
+                "            <div class=\"form-check my-2\">\n" +
                 "<input type='hidden' value='False' name='porada'>" +
                 "                <input type=\"checkbox\" class=\"form-check-input\" name=\"porada\">\n" +
-                "                <label for=\"\">Timova porada</label>\n" +
+                "                <label for=\"\">Tímova porada</label>\n" +
                 "            </div>\n" +
-                "            <div id=\"stafeta_check_box\" class=\"form-check\">\n" +
+                "            <div id=\"stafeta_check_box\" class=\"form-check my-2\">\n" +
                                 "<input type='hidden' value='False' name='odovzdanie'>" +
                 "                <input type=\"checkbox\" class=\"form-check-input\" name=\"odovzdanie\">\n" +
-                "                <label for=\"\">Odovzdanie stafety</label>\n" +
+                "                <label for=\"\">Odovzdanie štafety</label>\n" +
                 "            </div>\n" +
-                "            <label for=\"\">Casovy limit dosiahnutie stanoviska[s]:</label>\n" +
+                "            <label for=\"\" class=\"my-2\">Časový limit pre dosiahnutie stanoviska [s]:</label>\n" +
                 "            <input type=\"number\" name=\"limit\" class=\"form-control\">\n" +
-                "            <label for=\"\">Cena prepravy batoziny[€]:</label>\n" +
+                "            <label for=\"\" class=\"my-2\">Cena prepravy batožiny [€]:</label>\n" +
                 "            <input type=\"number\" name=\"cena_preprava\" class=\"form-control\" >\n" +
                 "            <hr>\n" +
                 "\n" +
