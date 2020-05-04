@@ -94,17 +94,47 @@ def view_page_success(request):
 
         return render(request, 'CREATE_RUN/page_success.html', {'beh': beh, 'stanoviska': stanoviska})
 
+
 def notify(beh, stanoviska):
     client = Client('http://pis.predmety.fiit.stuba.sk/pis/ws/Students/Team041Bezec?WSDL')
     bezci = client.service.getAll()
     pocasie = Client('http://pis.predmety.fiit.stuba.sk/pis/ws/WeatherForecast?WSDL')
-    pocasie = pocasie.service.getTemperatureByDate(beh["datum_konania"].strftime("%Y-%m-%d"), stanoviska[0]["zem_sirka"], stanoviska[0]["zem_dlzka"])
+    pocasie = pocasie.service.getTemperatureByDate(beh["datum_konania"].strftime("%Y-%m-%d"),
+                                                   stanoviska[0]["zem_sirka"], stanoviska[0]["zem_dlzka"])
     email_msg = "Ahoj {},\nmame pre teba novy beh!\nBeh {} sa kona {}, teplota ma byt {}.\nVidime sa!"
     for bezec in bezci:
         email = Client('http://pis.predmety.fiit.stuba.sk/pis/ws/NotificationServices/Email?WSDL')
         print("Posielam mail: {}".format(bezec["email"]))
-        send = email.service.notify("041", "D1QFEP", bezec["email"], "Novy beh", email_msg.format(bezec["name"], beh["name"], beh["datum_konania"], pocasie))
+        send = email.service.notify("041", "D1QFEP", bezec["email"], "Novy beh",
+                                    email_msg.format(bezec["name"], beh["name"], beh["datum_konania"], pocasie))
         print("Send: {}".format(send))
+
+
+def notify_before_run(stanoviska):
+    behy = Client('http://pis.predmety.fiit.stuba.sk/pis/ws/Students/Team041Beh?WSDL').service.getAll()
+    prihlasky = Client('http://pis.predmety.fiit.stuba.sk/pis/ws/Students/Team041Prihlaska?WSDL').service.getAll()
+    timi = Client('http://pis.predmety.fiit.stuba.sk/pis/ws/Students/Team041Tim?WSDL').service.getAll()
+    bezci = Client('http://pis.predmety.fiit.stuba.sk/pis/ws/Students/Team041Bezec?WSDL').service.getAll()
+    pocasie = Client('http://pis.predmety.fiit.stuba.sk/pis/ws/WeatherForecast?WSDL')
+    email = Client('http://pis.predmety.fiit.stuba.sk/pis/ws/NotificationServices/Email?WSDL')
+    for beh in behy:
+        for prihlaska in prihlasky:
+            if beh['id'] == prihlaska['id_beh']:
+                for stanovisko in stanoviska:
+                    if stanovisko['id_beh'] == beh['id'] and stanovisko['poradie'] == 1:
+                        print(stanovisko["zem_sirka"])
+                        pocasie = pocasie.service.getTemperatureByDate(beh["datum_konania"].strftime("%Y-%m-%d"),
+                                                                       stanovisko["zem_sirka"], stanovisko["zem_dlzka"])
+                        email_msg = "Ahoj {},\nnezabudni na beh!\nBeh {} sa kona {}, teplota ma byt {}.\nVidime sa!"
+                        for tim in timi:
+                            if tim['id'] == prihlaska['id_tim']:
+                                for bezec in bezci:
+                                    if bezec['id_tim'] == tim['id']:
+                                        print("Posielam mail: {}".format(bezec["email"]))
+                                        send = email.service.notify("041", "D1QFEP", bezec["email"], "Novy beh",
+                                                                    email_msg.format(bezec["name"], beh["name"],
+                                                                                     beh["datum_konania"], pocasie))
+                                        print("Send: {}".format(send))
 
 
 def view_stanovisko(request):
@@ -164,7 +194,6 @@ def vypocitaj_prevysenie(stanoviska):
     # ...
     #     ]
 
-
     for index, stanovisko in enumerate(stanoviska):
 
         if index == 0:
@@ -178,6 +207,7 @@ def vypocitaj_prevysenie(stanoviska):
             stanovisko['prevysenie'] = aktual_vyska - pred_vyska
 
     return stanoviska
+
 
 def ziskaj_stanice():
     stanice = []
