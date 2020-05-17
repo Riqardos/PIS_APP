@@ -3,7 +3,7 @@
 {% if entry %}
     <h2 class="mt-3">Vytvorenie nového behu</h2>
     <hr>
-    <form action='create_page_success' method='POST' class="border p-3">
+    <form id="pridat_beh_form" action='create_page_success' method='POST' class="border p-3">
     {% csrf_token %}
         <label for="" class="my-2">Názov behu:</label>
         <input name="name" type="text" class="form-control" required>
@@ -34,7 +34,8 @@
             </div>
 
         </div>
-        <button class="btn btn-primary my-4">Pridať beh</button>
+        <button id="pridat_beh" type="button" class="btn btn-primary my-4">Pridať beh</button>
+        <button id="pridat_beh_submit" style="display: none" >Pridať beh</button>
     </form>
 
 {% endif %}
@@ -46,6 +47,7 @@
 {% block script %}
 
 <script>
+    let status = '';
     $(document).ready(function(){
         $("#stanovisko_btn").click(function(){
             $("#stanoviska").append("<input type='hidden' name=\"stanovisko_name\" value='"+ $("#stanovisko_select").val() +"'>" +
@@ -67,9 +69,9 @@
                 "                <input type=\"checkbox\" class=\"form-check-input\" name=\"porada\">\n" +
                 "                <label for=\"\">Tímova porada</label>\n" +
                 "            </div>\n" +
-                "            <div id=\"stafeta_check_box\" class=\"form-check my-2\">\n" +
+                "            <div class=\"form-check my-2 s\">\n" +
                                 "<input type='hidden' value='False' name='odovzdanie'>" +
-                "                <input type=\"checkbox\" class=\"form-check-input\" name=\"odovzdanie\">\n" +
+                "                <input type=\"checkbox\" class=\"form-check-input stafeta_check_box\" " + status + "name=\"odovzdanie\">\n" +
                 "                <label for=\"\">Odovzdanie štafety</label>\n" +
                 "            </div>\n" +
                 "            <label for=\"\" class=\"my-2\">Časový limit pre dosiahnutie stanoviska [s]:</label>\n" +
@@ -83,21 +85,37 @@
         })
     });
 
+    $("#pridat_beh").click(function (event) {
+        if($("#stanoviska").children().length > 1){
+            $("#pridat_beh_submit").click();
+        }
+        else{
+            alert("Na vytvorenie behu musia byt minimalne 2 stanoviska.")
+        }
+    });
+
     document.getElementsByTagName('select')[0].onchange = function() {
     var index = this.selectedIndex;
     var inputText = this.children[index].innerHTML.trim();
     var prepinac;
     if (inputText == "štafeta") {
-        prepinac = false
+        prepinac = false;
+        status = ''
+
     }
     else{
-        prepinac = true
+        prepinac = true;
+        status = ' disabled '
     }
-
-    var nodes = document.getElementById("stafeta_check_box").getElementsByTagName('*');
-        for(var i = 0; i < nodes.length; i++){
-            nodes[i].disabled = prepinac;
-        }
+    $('.stafeta_check_box').each(function (index) {
+        $( this )[0].disabled = prepinac;
+        {#console.log($( this ))#}
+        {#console.log($( this )[0].disabled)#}
+    });
+    {#var nodes = document.getElementById("stafeta_check_box").getElementsByTagName('*');#}
+    {#    for(var i = 0; i < nodes.length; i++){#}
+    {#        nodes[i].disabled = prepinac;#}
+    {#    }#}
 
     console.log(inputText);
     }

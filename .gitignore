@@ -10,3 +10,8 @@ CREATE_RUN/migrations/__pycache__/__init__.cpython-38.pyc
 PIS_APP/__pycache__/__init__.cpython-38.pyc
 PIS_APP/__pycache__/settings.cpython-38.pyc
 PIS_APP/__pycache__/wsgi.cpython-38.pyc
+*.pyc
+*.iml
+*.xml
+*.pyc
+*.iml
